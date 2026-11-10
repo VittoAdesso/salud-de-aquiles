@@ -1,0 +1,158 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-success: hsl(var(--success));
+  --color-success-foreground: hsl(var(--success-foreground));
+  --color-warning: hsl(var(--warning));
+  --color-warning-foreground: hsl(var(--warning-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+}
+
+:root {
+  --background: 210 20% 98%;
+  --foreground: 222 47% 11%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+
+  --primary: 160 84% 36%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 210 25% 95%;
+  --secondary-foreground: 222 47% 12%;
+
+  --muted: 210 20% 96%;
+  --muted-foreground: 215 16% 47%;
+
+  --accent: 160 30% 94%;
+  --accent-foreground: 160 84% 28%;
+
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 210 40% 98%;
+
+  --success: 142 72% 38%;
+  --success-foreground: 144 100% 98%;
+
+  --warning: 38 92% 50%;
+  --warning-foreground: 38 95% 15%;
+
+  --border: 214 20% 90%;
+  --input: 214 20% 90%;
+  --ring: 160 84% 36%;
+
+  --radius: 0.75rem;
+
+  --chart-1: 160 84% 36%;
+  --chart-2: 24 94% 53%;
+  --chart-3: 199 89% 48%;
+  --chart-4: 43 96% 56%;
+  --chart-5: 280 65% 60%;
+}
+
+.dark {
+  --background: 224 40% 6%;
+  --foreground: 213 31% 94%;
+
+  --card: 224 40% 9%;
+  --card-foreground: 213 31% 94%;
+
+  --popover: 224 40% 9%;
+  --popover-foreground: 213 31% 94%;
+
+  --primary: 158 75% 42%;
+  --primary-foreground: 222 47% 6%;
+
+  --secondary: 217 33% 15%;
+  --secondary-foreground: 210 40% 98%;
+
+  --muted: 217 33% 15%;
+  --muted-foreground: 215 20% 65%;
+
+  --accent: 160 35% 16%;
+  --accent-foreground: 158 75% 55%;
+
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 210 40% 98%;
+
+  --success: 142 70% 45%;
+  --success-foreground: 144 100% 98%;
+
+  --warning: 38 92% 50%;
+  --warning-foreground: 38 95% 15%;
+
+  --border: 217 33% 18%;
+  --input: 217 33% 18%;
+  --ring: 158 75% 42%;
+
+  --chart-1: 158 75% 45%;
+  --chart-2: 24 94% 60%;
+  --chart-3: 199 89% 55%;
+  --chart-4: 43 96% 62%;
+  --chart-5: 280 65% 68%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  min-height: 100vh;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+}
+
+/* Glass card clinical styling */
+.glass-card {
+  background: hsl(var(--card) / 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+}
+
+.glass-nav {
+  background: hsl(var(--card) / 0.90);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid hsl(var(--border));
+}
+
+/* Tabular numbers for clinical tables and metrics */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}

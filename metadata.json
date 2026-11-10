@@ -1,0 +1,6 @@
+{
+  "name": "Salud de Aquiles",
+  "description": "App web personal para la gestión integral de salud, peso, dieta, alertas sanitarias y seguimiento de Aquiles.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
