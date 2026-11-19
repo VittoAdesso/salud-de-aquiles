@@ -8,7 +8,14 @@ import {
   HEART_ANCHOR,
 } from './alerts';
 import { getWeightSemaphore, getFluidRetentionSemaphore, calculateAge } from './healthScore';
-import { calculatePurchaseTotal, getStandardShrinkage, getSeasonIngredients, DEFAULT_PREPARACION_ITEMS } from './diet';
+import {
+  calculatePurchaseTotal,
+  getStandardShrinkage,
+  getSeasonIngredients,
+  getIngredientCategory,
+  calculateDietKPIs,
+  DEFAULT_PREPARACION_ITEMS,
+} from './diet';
 
 test('heart control date strictly adheres to May 7 / Nov 7 cycle from HEART_ANCHOR', () => {
   assert.equal(HEART_ANCHOR, '2026-05-07');
@@ -105,6 +112,28 @@ test('diet calculation and shrinkage percentages are exact', () => {
   const summerMerluza = getSeasonIngredients('verano', 'merluza', DEFAULT_PREPARACION_ITEMS);
   assert.ok(summerMerluza.rawPotGrams > 250);
   assert.ok(summerMerluza.cookedPotGrams > 200);
+
+  // Ingredient category classification
+  assert.equal(getIngredientCategory('Lomo de Merluza'), 'proteina');
+  assert.equal(getIngredientCategory('Pechuga de Pavo'), 'proteina');
+  assert.equal(getIngredientCategory('Batata'), 'tuberculo');
+  assert.equal(getIngredientCategory('Patata'), 'tuberculo');
+  assert.equal(getIngredientCategory('Calabacín'), 'verdura');
+  assert.equal(getIngredientCategory('Calabaza'), 'verdura');
+  assert.equal(getIngredientCategory('Cáscara de huevo molida'), 'suplemento');
+
+  // Modular diet KPI calculation (7 days vs 14 days)
+  const kpis7 = calculateDietKPIs(summerMerluza.activeItems, summerMerluza.rawPotGrams, summerMerluza.cookedPotGrams, 7);
+  assert.equal(kpis7.totalPots, 21);
+  assert.ok(kpis7.dailyCookedGrams > 600);
+  assert.ok(kpis7.proteinPct > 20);
+  assert.ok(kpis7.carbsPct > 20);
+  assert.ok(kpis7.estimatedDailyKcal > 500 && kpis7.estimatedDailyKcal < 1000);
+
+  const kpis14 = calculateDietKPIs(summerMerluza.activeItems, summerMerluza.rawPotGrams, summerMerluza.cookedPotGrams, 14);
+  assert.equal(kpis14.totalPots, 42);
+  assert.equal(kpis14.cookedPotGrams, kpis7.cookedPotGrams);
+  assert.ok(kpis14.batchCompraKg > kpis7.batchCompraKg);
 });
 
 test('age calculation from 2016-10-03 is accurate', () => {

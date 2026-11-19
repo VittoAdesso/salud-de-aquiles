@@ -1,24 +1,63 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { StoreProvider } from './lib/store';
 import { Navbar } from './components/Navbar';
 import { BottomNav } from './components/BottomNav';
 import { UrgentAlertsBanner } from './components/UrgentAlertsBanner';
 
-// Tabs
-import { DashboardTab } from './components/tabs/DashboardTab';
-import { PreparacionTab } from './components/tabs/PreparacionTab';
-import { SeguimientoTab } from './components/tabs/SeguimientoTab';
-import { RegistroTab } from './components/tabs/RegistroTab';
-import { HistorialTab } from './components/tabs/HistorialTab';
-import { NutricionTab } from './components/tabs/NutricionTab';
-import { CompraTab } from './components/tabs/CompraTab';
-import { CoccionTab } from './components/tabs/CoccionTab';
-import { TransicionTab } from './components/tabs/TransicionTab';
-import { PlanTab } from './components/tabs/PlanTab';
-import { GeneralTab } from './components/tabs/GeneralTab';
+// Lazy-loaded Modular Tabs for code-splitting and faster initial render
+const DashboardTab = lazy(() =>
+  import('./components/tabs/DashboardTab').then((m) => ({ default: m.DashboardTab }))
+);
+const PreparacionTab = lazy(() =>
+  import('./components/tabs/PreparacionTab').then((m) => ({ default: m.PreparacionTab }))
+);
+const SeguimientoTab = lazy(() =>
+  import('./components/tabs/SeguimientoTab').then((m) => ({ default: m.SeguimientoTab }))
+);
+const RegistroTab = lazy(() =>
+  import('./components/tabs/RegistroTab').then((m) => ({ default: m.RegistroTab }))
+);
+const HistorialTab = lazy(() =>
+  import('./components/tabs/HistorialTab').then((m) => ({ default: m.HistorialTab }))
+);
+const NutricionTab = lazy(() =>
+  import('./components/tabs/NutricionTab').then((m) => ({ default: m.NutricionTab }))
+);
+const CompraTab = lazy(() =>
+  import('./components/tabs/CompraTab').then((m) => ({ default: m.CompraTab }))
+);
+const CoccionTab = lazy(() =>
+  import('./components/tabs/CoccionTab').then((m) => ({ default: m.CoccionTab }))
+);
+const TransicionTab = lazy(() =>
+  import('./components/tabs/TransicionTab').then((m) => ({ default: m.TransicionTab }))
+);
+const PlanTab = lazy(() =>
+  import('./components/tabs/PlanTab').then((m) => ({ default: m.PlanTab }))
+);
+const GeneralTab = lazy(() =>
+  import('./components/tabs/GeneralTab').then((m) => ({ default: m.GeneralTab }))
+);
 
-// Standalone route page
-import { SincroEvolucionPage } from './pages/SincroEvolucionPage';
+// Standalone route page (lazy loaded)
+const SincroEvolucionPage = lazy(() =>
+  import('./pages/SincroEvolucionPage').then((m) => ({ default: m.SincroEvolucionPage }))
+);
+
+function TabFallback() {
+  return (
+    <div className="space-y-4 animate-pulse pb-24" aria-label="Cargando módulo...">
+      <div className="h-32 rounded-2xl bg-slate-200/60 dark:bg-slate-800/60" />
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
+        <div className="h-24 rounded-2xl bg-slate-200/50 dark:bg-slate-800/50" />
+        <div className="h-24 rounded-2xl bg-slate-200/50 dark:bg-slate-800/50" />
+        <div className="h-24 rounded-2xl bg-slate-200/50 dark:bg-slate-800/50" />
+        <div className="h-24 rounded-2xl bg-slate-200/50 dark:bg-slate-800/50" />
+      </div>
+      <div className="h-64 rounded-2xl bg-slate-200/50 dark:bg-slate-800/50" />
+    </div>
+  );
+}
 
 function AppContent() {
   const [currentRoute, setCurrentRoute] = useState<'main' | 'sincro-evolucion'>(() => {
@@ -66,23 +105,25 @@ function AppContent() {
       <UrgentAlertsBanner />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 pt-6">
-        {currentRoute === 'sincro-evolucion' ? (
-          <SincroEvolucionPage onBackToDashboard={() => navigateToMainTab('dashboard')} />
-        ) : (
-          <>
-            {activeTab === 'dashboard' && <DashboardTab onNavigateTab={navigateToMainTab} />}
-            {activeTab === 'preparacion' && <PreparacionTab />}
-            {activeTab === 'seguimiento' && <SeguimientoTab />}
-            {activeTab === 'registro' && <RegistroTab onNavigateToHistorial={() => navigateToMainTab('historial')} />}
-            {activeTab === 'historial' && <HistorialTab />}
-            {activeTab === 'nutricion' && <NutricionTab />}
-            {activeTab === 'compra' && <CompraTab />}
-            {activeTab === 'coccion' && <CoccionTab />}
-            {activeTab === 'transicion' && <TransicionTab />}
-            {activeTab === 'plan' && <PlanTab />}
-            {activeTab === 'general' && <GeneralTab />}
-          </>
-        )}
+        <Suspense fallback={<TabFallback />}>
+          {currentRoute === 'sincro-evolucion' ? (
+            <SincroEvolucionPage onBackToDashboard={() => navigateToMainTab('dashboard')} />
+          ) : (
+            <>
+              {activeTab === 'dashboard' && <DashboardTab onNavigateTab={navigateToMainTab} />}
+              {activeTab === 'preparacion' && <PreparacionTab />}
+              {activeTab === 'seguimiento' && <SeguimientoTab />}
+              {activeTab === 'registro' && <RegistroTab onNavigateToHistorial={() => navigateToMainTab('historial')} />}
+              {activeTab === 'historial' && <HistorialTab />}
+              {activeTab === 'nutricion' && <NutricionTab />}
+              {activeTab === 'compra' && <CompraTab />}
+              {activeTab === 'coccion' && <CoccionTab />}
+              {activeTab === 'transicion' && <TransicionTab />}
+              {activeTab === 'plan' && <PlanTab />}
+              {activeTab === 'general' && <GeneralTab />}
+            </>
+          )}
+        </Suspense>
       </main>
 
       <BottomNav
